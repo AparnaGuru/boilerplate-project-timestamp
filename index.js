@@ -27,15 +27,35 @@ app.get("/api/hello", function (req, res) {
 
 var respJson={};
 app.get("/api/:inputval", (req,res) => {
-  var inputval=req.params.inputval;
-  
-  if (inputval.includes("-")) {
-    respJson['unix'] = new Date(inputval).getTime();
-    respJson['utc'] = new Date(inputval).toUTCString();
-    res.json(respJson);
+  console.log(req.url)
+  var inputval=req.params.inputval
+
+  if (isNaN(inputval) == false) {
+    inputval = parseInt(inputval);
   }
+  var dateObject = new Date(inputval);
+  
+  if (dateObject.toString() == "Invalid Date") {
+    respJson["error"]= "Invalid Date"
+  }
+  else if (inputval.toString().includes("-")) {
+    respJson['unix'] = new Date(inputval).getTime();
+    respJson['utc'] = new Date(inputval).toUTCString();    
+  } 
+  else  {
+    console.log("hello");
+    respJson['unix'] = new Date(inputval).getTime();
+    respJson['utc'] = new Date(inputval).toUTCString();    
+  }
+console.log(respJson)
+res.json(respJson);
 })
 
+app.get("/api", (req,res) => {
+  respJson['unix'] = new Date().getTime();
+  respJson['utc'] = new Date().toUTCString();
+  res.json(respJson);
+})
 
 
 // listen for requests :)
