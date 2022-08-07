@@ -25,6 +25,18 @@ app.get("/api/hello", function (req, res) {
 });
 
 
+var respJson={};
+app.get("/api/:inputval", (req,res) => {
+  var inputval=req.params.inputval;
+  
+  if (inputval.includes("-")) {
+    respJson['unix'] = new Date(inputval).getTime();
+    respJson['utc'] = new Date(inputval).toUTCString();
+    res.json(respJson);
+  }
+})
+
+
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
